@@ -1,5 +1,7 @@
 # AI Development Rules
 
+Always write clean code.
+
 ## Stack
 
 - React
