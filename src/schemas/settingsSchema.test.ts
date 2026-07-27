@@ -14,7 +14,7 @@ function fieldErrors(values: unknown) {
 describe('settingsFormSchema', () => {
   it('accepts valid values', () => {
     const result = settingsFormSchema.safeParse({
-      name: 'Alex Johnson',
+      fullName: 'Alex Johnson',
       email: 'alex@example.com',
       theme: 'dark',
     })
@@ -24,7 +24,7 @@ describe('settingsFormSchema', () => {
 
   it('trims whitespace from name and email', () => {
     const result = settingsFormSchema.safeParse({
-      name: '  Alex  ',
+      fullName: '  Alex  ',
       email: '  alex@example.com  ',
       theme: 'light',
     })
@@ -32,36 +32,46 @@ describe('settingsFormSchema', () => {
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data).toEqual({
-        name: 'Alex',
+        fullName: 'Alex',
         email: 'alex@example.com',
         theme: 'light',
       })
     }
   })
 
-  it('requires name', () => {
+  it('requires a full name', () => {
     const errors = fieldErrors({
-      name: '',
+      fullName: '',
       email: 'alex@example.com',
       theme: 'light',
     })
 
-    expect(errors.name).toContain('Name is required.')
+    expect(errors.fullName).toContain('Full Name is required.')
   })
 
-  it('rejects whitespace-only name', () => {
+  it('rejects whitespace-only full name', () => {
     const errors = fieldErrors({
-      name: '   ',
+      fullName: '   ',
       email: 'alex@example.com',
       theme: 'light',
     })
 
-    expect(errors.name).toContain('Name is required.')
+    expect(errors.fullName).toContain('Full Name is required.')
+  })
+
+  it('requires at least two characters for the full name', () => {
+    const errors = fieldErrors({
+      fullName: 'A',
+      email: 'alex@example.com',
+      theme: 'light',
+    })
+
+    expect(errors.fullName).toContain('Full Name must be at least 2 characters.')
   })
 
   it('requires email', () => {
     const errors = fieldErrors({
-      name: 'Alex',
+      fullName: 'Alex',
       email: '',
       theme: 'light',
     })
@@ -71,7 +81,7 @@ describe('settingsFormSchema', () => {
 
   it('rejects invalid email', () => {
     const errors = fieldErrors({
-      name: 'Alex',
+      fullName: 'Alex',
       email: 'not-an-email',
       theme: 'light',
     })
@@ -81,7 +91,7 @@ describe('settingsFormSchema', () => {
 
   it('requires a supported theme', () => {
     const errors = fieldErrors({
-      name: 'Alex',
+      fullName: 'Alex',
       email: 'alex@example.com',
       theme: 'system',
     })

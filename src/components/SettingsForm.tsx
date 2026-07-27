@@ -51,6 +51,7 @@ export function SettingsForm({
       onSubmit={handleSubmit(handleSave)}
       noValidate
       aria-labelledby="settings-form-heading"
+      aria-busy={isSubmitting}
     >
       <header className="settings-form__header">
         <div>
@@ -70,13 +71,15 @@ export function SettingsForm({
       <section className="settings-section" aria-labelledby="profile-heading">
         <h2 id="profile-heading">Profile</h2>
         <div className="settings-grid">
-          <FormField id="name" label="Name" error={errors.name?.message}>
+          <FormField id="full-name" label="Full Name" error={errors.fullName?.message}>
             <TextInput
-              id="name"
+              id="full-name"
               autoComplete="name"
-              aria-invalid={errors.name ? true : undefined}
-              aria-describedby={errors.name ? 'name-error' : undefined}
-              {...register('name')}
+              required
+              minLength={2}
+              aria-invalid={errors.fullName ? true : undefined}
+              aria-describedby={errors.fullName ? 'full-name-error' : undefined}
+              {...register('fullName')}
             />
           </FormField>
 
@@ -85,6 +88,7 @@ export function SettingsForm({
               id="email"
               type="email"
               autoComplete="email"
+              required
               aria-invalid={errors.email ? true : undefined}
               aria-describedby={errors.email ? 'email-error' : undefined}
               {...register('email')}
@@ -94,10 +98,14 @@ export function SettingsForm({
           <FormField id="theme" label="Theme" error={errors.theme?.message}>
             <SelectInput
               id="theme"
+              required
               aria-invalid={errors.theme ? true : undefined}
               aria-describedby={errors.theme ? 'theme-error' : undefined}
               {...register('theme')}
             >
+              <option value="" disabled>
+                Select a theme
+              </option>
               {themeOptions.map((theme) => (
                 <option key={theme} value={theme}>
                   {theme === 'light' ? 'Light' : 'Dark'}
@@ -109,7 +117,12 @@ export function SettingsForm({
       </section>
 
       <footer className="settings-form__actions">
-        <button type="button" className="button button--secondary" onClick={handleReset}>
+        <button
+          type="button"
+          className="button button--secondary"
+          onClick={handleReset}
+          disabled={isSubmitting}
+        >
           Reset
         </button>
         <button type="submit" className="button button--primary" disabled={isSubmitting}>
