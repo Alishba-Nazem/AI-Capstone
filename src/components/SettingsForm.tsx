@@ -113,7 +113,7 @@ export function SettingsForm({
           Reset
         </button>
         <button type="submit" className="button button--primary" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : 'Save'}
+          {isSubmitting ? 'Saving...' : 'Save changes'}
         </button>
       </footer>
     </form>
